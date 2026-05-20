@@ -36,7 +36,7 @@ Compile_Raven_selns <- function(site_id = character(),
            Behavior = gsub(pattern = "T", replacement = "Transit", fixed=TRUE, x = Behavior),
            Behavior = gsub(pattern = "M", replacement = "Maneuver", fixed=TRUE, x = Behavior))
   
- 
+  
   return = all_selns
   
 }
@@ -47,7 +47,7 @@ Compile_Raven_selns <- function(site_id = character(),
 
 
 Compile_Raven_bio_selns <- function(site_id = character(), 
-                                dep_id = character()){
+                                    dep_id = character()){
   dir_seln <- tk_choose.dir(caption = "Select folder with selection tables (.txt)")
   seln_tables <- dir_seln |>
     # list all files with .txt extension
@@ -377,7 +377,15 @@ arcToRaven <- function(arc=NULL, wav=NULL, wavTz='UTC', gpsTz='UTC', freq=250, d
 # calibration is large negative number
 # freqMin/Max are allowed peak ranges
 calculatePeakLev <- function(dir, cal=NULL, freqMin=NULL, freqMax=NULL, progress=TRUE, file=NULL) {
-  wavFiles <- list.files(dir, full.names=TRUE, pattern='\\.wav$')
+  if(length(dir) == 1 &&
+     dir.exists(dir)) {
+    wavFiles <- list.files(dir, full.names=TRUE, pattern='\\.wav$')
+  } else if all(file.exists(dir)) {
+    wavFiles <- dir
+  } else {
+    warning('dir must be a directory or list of wav files')
+    return(NULL)
+  }
   WINDOW <- numeric(0)
   if(progress) {
     pb <- txtProgressBar(min=0, max=length(wavFiles), style=3)
