@@ -380,7 +380,7 @@ calculatePeakLev <- function(dir, cal=NULL, freqMin=NULL, freqMax=NULL, progress
   if(length(dir) == 1 &&
      dir.exists(dir)) {
     wavFiles <- list.files(dir, full.names=TRUE, pattern='\\.wav$')
-  } else if all(file.exists(dir)) {
+  } else if(all(file.exists(dir))) {
     wavFiles <- dir
   } else {
     warning('dir must be a directory or list of wav files')
